@@ -28,6 +28,8 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
+            // INFO BANNER
             Stack(
               alignment: Alignment.bottomCenter,
               children: [
@@ -102,6 +104,8 @@ class HomePage extends StatelessWidget {
               ],
             ),
             // const SizedBox(height: 15),
+
+
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Text(
@@ -109,6 +113,8 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
             ),
+
+            // TASK CARDS
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Tasks(),
@@ -119,6 +125,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+// BOTTOM NAVIGATION BAR
   Widget _bottomNavBar() {
     return Container(
       decoration: BoxDecoration(
@@ -169,6 +176,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+// APP BAR
   AppBar _tAppBar() {
     return AppBar(
       title: Row(

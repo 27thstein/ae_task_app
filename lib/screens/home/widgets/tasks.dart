@@ -1,4 +1,5 @@
 import 'package:ae_task_app/models/task.dart';
+import 'package:ae_task_app/screens/detail/detail_page.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
@@ -34,37 +35,47 @@ class Tasks extends StatelessWidget {
 
 // Build card for regular task
 Widget _buildTaskCard(BuildContext context, Task task) {
-  return Container(
-    decoration: BoxDecoration(
-      color: task.bgColor,
-      borderRadius: BorderRadius.circular(15),
-    ),
-    padding: const EdgeInsets.all(15),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(task.icon, color: task.iconColor, size: 35),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              task.title!,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                _buildTaskStatus(task.left!, task.done!, task.btnColor!),
-              ],
-            )
-          ],
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (contex) => DetailPage(task),
         ),
-      ],
+      );
+    },
+    child: Container(
+      decoration: BoxDecoration(
+        color: task.bgColor,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(task.icon, color: task.iconColor, size: 35),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                task.title!,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  _buildTaskStatus(task.left!, task.done!, task.btnColor!),
+                ],
+              )
+            ],
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -105,15 +116,13 @@ Widget _buildStatusCircle(num value, String label, Color color) {
 
 Widget _buildAddTaskCard() {
   return GestureDetector(
-    onTap: () {
-     
-    },
+    onTap: () {},
     child: DottedBorder(
-      color: Colors.grey, 
+      color: Colors.grey,
       borderType: BorderType.RRect,
       radius: const Radius.circular(15),
       dashPattern: const [6, 3],
-      strokeWidth: 2, 
+      strokeWidth: 2,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.transparent,
