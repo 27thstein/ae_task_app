@@ -1,19 +1,29 @@
+import 'package:ae_task_app/bloc/task_bloc.dart';
 import 'package:ae_task_app/constants/colors.dart';
-import 'package:ae_task_app/screens/home/widgets/tasks.dart';
+import 'package:ae_task_app/models/category_model.dart';
+import 'package:ae_task_app/models/task.dart';
+import 'package:ae_task_app/screens/home/widgets/category_cards.dart';
+import 'package:ae_task_app/screens/home/widgets/task_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+
+   HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+ Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _tAppBar(),
       bottomNavigationBar: _bottomNavBar(),
       floatingActionButton: FloatingActionButton(
-        key: super.key,
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (_) => TaskBottomSheet(),
+          );
+        },
         elevation: 0,
         backgroundColor: Colors.black,
         child: const Icon(
@@ -28,83 +38,8 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             // INFO BANNER
-            Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(15),
-                  padding: const EdgeInsets.all(20),
-                  height: 120,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: const Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      CircleAvatar(
-                        backgroundColor: Colors.white30,
-                        radius: 16,
-                        child: Center(
-                          child: Icon(
-                            Icons.star,
-                            size: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 25.0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Go Premium!',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w800),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            'Get unlimited access \nto all our features!',
-                            style:
-                                TextStyle(color: Colors.white54, fontSize: 15),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  bottom: 15,
-                  right: 15,
-                  child: Container(
-                    height: 40,
-                    width: 45,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 71, 143, 243),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: const Icon(
-                      Icons.arrow_forward,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            // const SizedBox(height: 15),
-
+            infoBanner(),
 
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -114,14 +49,116 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            // TASK CARDS
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Tasks(),
-            )
+            // BlocBuilder to check the state
+            BlocBuilder<TaskBloc, TaskState>(
+              builder: (context, state) {
+                if (state is TaskLoading) {
+                  // Show a loading indicator if the tasks are still loading
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is TaskError) {
+                  // Show an error message if something went wrong
+                  return const Center(child: Text('Error loading tasks'));
+                } else if (state is TaskLoaded) {
+                  if (state.tasks.isEmpty) {
+                    // Display a message or placeholder if no tasks are available
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Center(
+                        child: Text(
+                          'No tasks available. Add a task to get started!',
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Display the category cards with tasks
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: CategoryCards(tasks: state.tasks),
+                    );
+                  }
+                }
+                return const SizedBox(); // Fallback in case state is unexpected
+              },
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Stack infoBanner() {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        Container(
+          margin: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(20),
+          height: 120,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: const Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 10,
+              ),
+              CircleAvatar(
+                backgroundColor: Colors.white30,
+                radius: 16,
+                child: Center(
+                  child: Icon(
+                    Icons.star,
+                    size: 15,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 25.0,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Go Premium!',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Get unlimited access \nto all our features!',
+                    style: TextStyle(color: Colors.white54, fontSize: 15),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: 15,
+          right: 15,
+          child: Container(
+            height: 40,
+            width: 45,
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 71, 143, 243),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: const Icon(
+              Icons.arrow_forward,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

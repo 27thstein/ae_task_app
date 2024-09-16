@@ -15,5 +15,9 @@ class TColors {
   static const Color green =  Color(0xFF53DF61);
   static const Color greenAccent =  Color(0xFFDBF9DE);
 
+
+  static const Color yellow =  Color.fromARGB(255, 234, 201, 85);
+  static const Color yellowAccent =  Color.fromARGB(255, 247, 236, 197);
+
  
 }

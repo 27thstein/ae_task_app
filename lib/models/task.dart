@@ -1,197 +1,69 @@
-import 'package:ae_task_app/constants/colors.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+// Define the Task model
 class Task {
-  IconData? icon;
-  String? title;
-  Color? iconColor;
-  Color? bgColor;
-  Color? btnColor;
-  List<Map<String, dynamic>>? desc;
-  num? left;
-  num? done;
-  bool? isLast;
+  final String title;
+  final String description;
+  final String category;
+  final DateTime date;
+  final TimeOfDay time;
+  bool completed;
 
   Task({
-    this.icon,
-    this.title,
-    this.iconColor,
-    this.bgColor,
-    this.btnColor,
-    this.desc,
-    this.isLast = false,
-    this.done,
-    this.left,
+    required this.title,
+    required this.description,
+    required this.category,
+    required this.date,
+    required this.time,
+    this.completed = false,
   });
 
-  static List<Task> generateTasks() {
-    return [
-      Task(
-          icon: Icons.person,
-          title: 'Personal',
-          iconColor: TColors.red,
-          bgColor: TColors.redAccent,
-          btnColor: const Color.fromARGB(190, 245, 151, 151),
-          left: 3,
-          done: 1,
-          desc: [
-            {
-              'time': '9:00 am',
-              'title': 'Go for a wal with dog',
-              'slot': '9:00 - 10:00',
-              'tlColor': TColors.red,
-              'bgColor': TColors.redAccent,
-            },
-            {
-              'time': '10:00 am',
-              'title': 'Shot on Dribbble',
-              'slot': '10:00 - 12:00',
-              'tlColor': TColors.purple,
-              'bgColor': TColors.purpleAccent,
-            },
-            {
-              'time': '11:00 am',
-              'title': '',
-              'slot': '',
-              'tlColor': TColors.purple,
-              'bgColor': TColors.purpleAccent,
-            },
-            {
-              'time': '12:00 pm',
-              'title': '',
-              'slot': '',
-              'tlColor': TColors.purple,
-              'bgColor': TColors.purpleAccent,
-            },
-            {
-              'time': '1:00 pm',
-              'title': '',
-              'slot': '',
-              'tlColor': Colors.grey.withOpacity(0.3),
-              'bgColor': Colors.grey.withOpacity(0.3),
-            },
-            {
-              'time': '2:00 pm',
-              'title': 'Call with Client',
-              'slot': '2:00 - 3:00',
-              'tlColor': TColors.blue,
-              'bgColor': TColors.blueAccent,
-            }
-          ]),
-      Task(
-          icon: Icons.cases_outlined,
-          title: 'Work',
-          iconColor: TColors.purple,
-          bgColor: TColors.purpleAccent,
-          btnColor: const Color.fromARGB(192, 193, 169, 250),
-          left: 1,
-          done: 3,
-          desc: [
-            {
-              'time': '9:00 am',
-              'title': 'Zoom Meeting',
-              'slot': '9:00 - 10:00',
-              'tlColor': TColors.purple,
-              'bgColor': TColors.purpleAccent,
-            },
-            {
-              'time': '10:00 am',
-              'title': 'Sho0t at photo studio',
-              'slot': '10:00 - 12:00',
-              'tlColor': TColors.red,
-              'bgColor': TColors.redAccent,
-            },
-            {
-              'time': '11:00 am',
-              'title': '',
-              'slot': '',
-              'tlColor': TColors.red,
-              'bgColor': TColors.redAccent,
-            },
-            {
-              'time': '12:00 pm',
-              'title': '',
-              'slot': '',
-              'tlColor': TColors.red,
-              'bgColor': TColors.redAccent,
-            },
-            {
-              'time': '1:00 pm',
-              'title': 'Appointment with Doctor',
-              'slot': '1:00 - 2:00',
-              'tlColor': Colors.blue.withOpacity(0.3),
-              'bgColor': Colors.blueAccent.withOpacity(0.3),
-            },
-            {
-              'time': '2:00 pm',
-              'title': 'Call with Client',
-              'slot': '2:00 - 3:00',
-              'tlColor': TColors.blue,
-              'bgColor': TColors.blueAccent,
-            },
-            {
-              'time': '3:00 pm',
-              'title': '',
-              'slot': '',
-              'tlColor': Colors.grey.withOpacity(0.3),
-              'bgColor': Colors.grey.withOpacity(0.3),
-            },
-          ]),
-      Task(
-          icon: Icons.favorite_rounded,
-          title: 'Health',
-          iconColor: TColors.blue,
-          bgColor: TColors.blueAccent,
-          btnColor: const Color.fromARGB(255, 128, 216, 245),
-          left: 2,
-          done: 1,
-          //  desc:
-          //  [
-          //   {
-          //     'time': '9:00 am',
-          //     'title': 'Go for a wal with dog',
-          //     'slot': '9:00 - 10:00',
-          //     'tlColor': TColors.blue,
-          //     'bgColor': TColors.blueAccent,
-          //   },
-          //   {
-          //     'time': '10:00 am',
-          //     'title': 'Shot on Dribbble',
-          //     'slot': '10:00 - 12:00',
-          //     'tlColor': TColors.purple,
-          //     'bgColor': TColors.purpleAccent,
-          //   },
-          //   {
-          //     'time': '11:00 am',
-          //     'title': '',
-          //     'slot': '',
-          //     'tlColor': TColors.purple,
-          //     'bgColor': TColors.purpleAccent,
-          //   },
-          //   {
-          //     'time': '12:00 pm',
-          //     'title': '',
-          //     'slot': '',
-          //     'tlColor': TColors.purple,
-          //     'bgColor': TColors.purpleAccent,
-          //   },
-          //   {
-          //     'time': '1:00 pm',
-          //     'title': '',
-          //     'slot': '',
-          //     'tlColor': Colors.grey.withOpacity(0.3),
-          //     'bgColor': Colors.grey.withOpacity(0.3),
-          //   },
-          //   {
-          //     'time': '2:00 pm',
-          //     'title': 'Call with Client',
-          //     'slot': '2:00 - 3:00',
-          //     'tlColor': TColors.red,
-          //     'bgColor': TColors.redAccent,
-          //   }
-          // ]
-         ),
-      Task(isLast: true),
-    ];
+  // Convert TimeOfDay to formatted string
+  static String formatTimeOfDay(TimeOfDay timeOfDay) {
+    final now = DateTime.now();
+    final dateTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      timeOfDay.hour,
+      timeOfDay.minute,
+    );
+
+    return DateFormat.Hm().format(dateTime);
   }
+
+  // Convert Task to a Map
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'description': description,
+      'category': category,
+      'date': date.toIso8601String(),
+      'time': formatTimeOfDay(time),
+      'completed': completed,
+    };
+  }
+
+  // Convert Map to Task
+  factory Task.fromMap(Map<String, dynamic> map) {
+    return Task(
+      title: map['title'],
+      description: map['description'],
+      category: map['category'],
+      date: DateTime.parse(map['date']),
+      time: TimeOfDay(
+        hour: int.parse(map['time'].split(':')[0]),
+        minute: int.parse(map['time'].split(':')[1]),
+      ),
+      completed: map['completed'],
+    );
+  }
+
+  // Convert Task to JSON
+  String toJson() => json.encode(toMap());
+
+  // Convert JSON to Task
+  factory Task.fromJson(String source) => Task.fromMap(json.decode(source));
 }

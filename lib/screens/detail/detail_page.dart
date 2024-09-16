@@ -1,3 +1,4 @@
+import 'package:ae_task_app/models/category_model.dart';
 import 'package:ae_task_app/models/task.dart';
 import 'package:ae_task_app/screens/detail/widgets/date_picker.dart';
 import 'package:ae_task_app/screens/detail/widgets/task_timeline.dart';
@@ -5,12 +6,13 @@ import 'package:ae_task_app/screens/detail/widgets/tasks_header.dart';
 import 'package:flutter/material.dart';
 
 class DetailPage extends StatelessWidget {
-  final Task task;
-  const DetailPage(this.task);
+  final CategoryModel categoryModel;
+  final List<Task> tasksForCategory;
+
+  const DetailPage(this.categoryModel, this.tasksForCategory);
 
   @override
   Widget build(BuildContext context) {
-    final detailsList = task.desc;
     return Scaffold(
       backgroundColor: Colors.black,
       body: CustomScrollView(
@@ -34,23 +36,15 @@ class DetailPage extends StatelessWidget {
               ),
             ),
           ),
-          detailsList == null
-              ? SliverFillRemaining(
-                  child: Container(
-                      color: Colors.white,
-                      child: const Center(
-                        child: Text(
-                          'No tasks today!',
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                      )),
-                )
-              : SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (_, index) => TaskTimeline(detailsList[index]),
-                    childCount: detailsList.length,
-                  ),
-                )
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (_, index) => TaskTimeline(tasksForCategory[index]),
+              childCount: tasksForCategory.length,
+            ),
+          ),
+          SliverFillRemaining(
+            child: Container(color: Colors.white, child: const Center()),
+          )
         ],
       ),
     );
@@ -83,7 +77,7 @@ class DetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${task.title} tasks',
+              '${categoryModel.name} Tasks',
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -93,7 +87,7 @@ class DetailPage extends StatelessWidget {
               height: 5,
             ),
             Text(
-              'You have ${task.left} tasks today!',
+              'You have ${categoryModel.left} categorys today!',
               style: TextStyle(fontSize: 12.0, color: Colors.grey.shade600),
             )
           ],
